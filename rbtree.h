@@ -22,3 +22,4 @@ void rbtree_insert(rbnode_t *node, rbnode_t **groot);
 void rbtree_delete(rbnode_t *node, rbnode_t **groot);
 void fix_insert(rbnode_t *node, rbnode_t **groot);
 void fix_delete(rbnode_t *node, rbnode_t **groot);
+rbnode_t *rbnode_find(RBTREE_NODE_DATA_TYPE target, rbnode_t *rt);

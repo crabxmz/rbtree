@@ -94,6 +94,11 @@ void rbtree_insert(rbnode_t *new_node, rbnode_t **groot)
 
 void rbtree_delete(rbnode_t *node, rbnode_t **groot)
 {
+    if (!node)
+    {
+        return;
+    }
+
     rbnode_t *node_to_fix = 0;
     char deleted_color = node->color; // root of subtree which lack a black node
     // 0 child
@@ -309,4 +314,28 @@ lb2:
     {
         node->color = 'b';
     }
+}
+
+rbnode_t *rbnode_find(RBTREE_NODE_DATA_TYPE target, rbnode_t *rt)
+{
+    while (rt)
+    {
+        if (target == rt->data)
+        {
+            return rt;
+        }
+        else if (rt->left && target < rt->data)
+        {
+            rt = rt->left;
+        }
+        else if (rt->right && target > rt->data)
+        {
+            rt = rt->right;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    return 0;
 }

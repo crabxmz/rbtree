@@ -101,10 +101,10 @@ void test_rand()
     {
         data[i].data = rand() % 10000000 + 1;
         data[i].left = data[i].right = data[i].fa = 0;
-        if (!i)
-            puts("");
-        else
-            printf("data[%d]=%#x\n", i, data[i].data);
+        // if (!i)
+        //     puts("");
+        // else
+        //     printf("data[%d]=%#x\n", i, data[i].data);
     }
 
     root = &data[0];
@@ -117,7 +117,7 @@ void test_rand()
         check_rbtree(root);
     }
     // print_rbtree(root);
-    puts("now del...");
+    // puts("now del...");
     for (i = 1; i < TEST_NODE_NUM; i++)
     {
         rbtree_delete(&data[i], &root);
@@ -126,13 +126,58 @@ void test_rand()
     // print_rbtree(root);
 }
 
+void test_alloc()
+{
+    srand(time(NULL));
+    int cnt = 10000;
+    int max_node = 2000;
+    int num_node = 1;
+    root = (rbnode_t *)malloc(sizeof(rbnode_t));
+    root->data = rand() % 10000000 + 1;
+    root->color = 'b';
+
+    while (cnt--)
+    {
+        if ((rand() % 2) && num_node < max_node)
+        {
+            rbnode_t *new_node = (rbnode_t *)malloc(sizeof(rbnode_t));
+            new_node->data = rand() % 1000000000 + 1;
+            new_node->left = new_node->right = new_node->fa = 0;
+            while (rbnode_find(new_node->data, root))
+            {
+                new_node->data = rand() % 1000000000 + 1;
+            }
+
+            rbtree_insert(new_node, &root);
+            num_node++;
+        }
+        else if (!(rand() % 2) && num_node > 1)
+        {
+            rbnode_t *old_rt = root;
+            rbtree_delete(root, &root);
+            free(old_rt);
+            num_node--;
+        }
+    }
+    while (num_node--)
+    {
+        rbnode_t *old_rt = root;
+        rbtree_delete(root, &root);
+        free(old_rt);
+    }
+}
+
 int main()
 {
     test1();
-    while (1)
+    puts("init test passed");
+    int cnt = 10000;
+    while (cnt--)
     {
         test_rand();
     }
-
+    puts("rand test passed");
+    test_alloc();
+    puts("alloc test passed");
     return 0;
 }
